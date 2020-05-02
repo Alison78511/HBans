@@ -1,0 +1,21 @@
+main: FBans.Main
+version: 5.4
+author: FlashDev
+description: Plugin de bans com integração twitter e discord totalmente configuravel
+name: FBans
+commands:
+ ban:
+ ipban:
+ kick:
+ unban:
+ ipunban:
+ mute:
+ mutar:
+ unmute:
+ tempban:
+ tempmute:
+ warn:
+ reportes:
+ reportar:
+ verificar:
+ unwarn:
