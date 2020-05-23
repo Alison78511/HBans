@@ -15,8 +15,8 @@ public class IpBanC implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (label.equalsIgnoreCase("ipban")) {
 			if (!sender.hasPermission("HBans.ipban")) {
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("SemPermissao").replace("&", "ง"));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("SemPermissao").replace("&", "ยง"));
 				return true;
 			}
 			if (args.length >= 2) {
@@ -30,30 +30,31 @@ public class IpBanC implements CommandExecutor {
 				Player targeton = Bukkit.getPlayer(args[0]);
 				if (targeton != null) {
 					if (APIGeral.CheckIpBan(targeton) == true) {
-						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-								+ Main.m.getConfig().getString("JaBanido").replace("&", "ง"));
+						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+								+ Main.m.getConfig().getString("JaBanido").replace("&", "ยง"));
 						return true;
 					}
 					
 					if (targeton.hasPermission("HBans.Imune.IpBan")){
-						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-								+ Main.m.getConfig().getString("PlayerImune").replace("&", "ง"));
+						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+								+ Main.m.getConfig().getString("PlayerImune").replace("&", "ยง"));
 						return true;
 					}
 
 					APIGeral.IpBan(sender.getName(), targeton.getAddress().getHostName(), allArgs, targeton);
+					APIGeral.addBan();
 
 				} else {
 
-					sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-							+ Main.m.getConfig().getString("PlayerOff").replace("&", "ง"));
+					sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+							+ Main.m.getConfig().getString("PlayerOff").replace("&", "ยง"));
 
 				}
 				return true;
 
 			} else {
-				sender.sendMessage((Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("IpBanI").replace("&", "ง")));
+				sender.sendMessage((Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("IpBanI").replace("&", "ยง")));
 			}
 		}
 
