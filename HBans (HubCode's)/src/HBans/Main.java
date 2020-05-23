@@ -1,161 +1,189 @@
-package HBans;
+package PombaSS.cmds;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.List;
+import java.util.*;
+import org.bukkit.command.*;
+import org.bukkit.entity.*;
+import org.bukkit.*;
+import org.bukkit.event.*;
+import org.bukkit.event.player.*;
 
-import javax.security.auth.login.LoginException;
+import PombaSS.uts.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import HBans.Comandos.BanC;
-import HBans.Comandos.IpBanC;
-import HBans.Comandos.IpUnbanC;
-import HBans.Comandos.KickC;
-import HBans.Comandos.MuteC;
-import HBans.Comandos.ReportarC;
-import HBans.Comandos.ReportesC;
-import HBans.Comandos.TempBanC;
-import HBans.Comandos.TempMuteC;
-import HBans.Comandos.UnbanC;
-import HBans.Comandos.UnmuteC;
-import HBans.Comandos.UnwarnC;
-import HBans.Comandos.VerificarC;
-import HBans.Comandos.WarnC;
-import HBans.Config.BanConfig;
-import HBans.Config.IpBanConfig;
-import HBans.Config.IpBanConfig2;
-import HBans.Config.MotivoReportConfig;
-import HBans.Config.MuteConfig;
-import HBans.Config.ReportesConfig;
-import HBans.Config.StatusConfig;
-import HBans.Config.TempBanConfig;
-import HBans.Config.TempMuteConfig;
-import HBans.Config.WarnConfig;
-import HBans.EventApi.APIGeral;
-import HBans.EventApi.InventoryClick;
-import HBans.EventApi.JoinBan;
-import HBans.EventApi.MessageNormal;
-import HBans.Mysql.Data;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.Game;
-
-public class Main extends JavaPlugin {
-
-	public static Main m;
-	public static JDA jda;
-
-	Connection conn = null;
-
-	@SuppressWarnings("deprecation")
-	public void onEnable() {
-		getConfig().options().copyDefaults(true);
-		saveDefaultConfig();
-
-		if (getConfig().getBoolean("Discord") == true) {
-			if (getConfig().getString("Bot.Token").equalsIgnoreCase("XXX-XXX-XXX-XXX")) {
-				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Token inválido, plugin desabilitado");
-				return;
-			} else if (getConfig().getString("Bot.Canal").equalsIgnoreCase("XXX-XXX-XXX-XXX")) {
-				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Canal inválido, plugin desabilitado");
-				return;
-			} else if (getConfig().getString("Bot.Canal-Reportes").equalsIgnoreCase("XXX-XXX-XXX-XXX")) {
-				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Canal inválido, plugin desabilitado");
-				return;
-			}
-
-			try {
-				jda = new JDABuilder(AccountType.BOT).setToken(getConfig().getString("Bot.Token")).buildAsync();
-			} catch (LoginException e) {
-				e.printStackTrace();
-			}
-			jda.getPresence().setGame(Game.playing(getConfig().getString("Bot.Presence")));
-		}
-
-		if (getConfig().getBoolean("MySQL.ativado") == true) {
-			try {
-				try {
-
-					Class.forName("com.mysql.jdbc.Driver");
-
-					Data.con = (Connection) DriverManager.getConnection(
-							"jdbc:mysql://" + getConfig().getString("MySQL.Host") + ":"
-									+ getConfig().getString("MySQL.Port") + "/"
-									+ getConfig().getString("MySQL.Database"),
-							getConfig().getString("MySQL.User"), getConfig().getString("MySQL.Pass"));
-
-				} catch (ClassNotFoundException | SQLException e) {
-
-					e.printStackTrace();
-
-				}
-				Data.statement = conn.createStatement();
-				Data.CriarTabela();
-			} catch (Exception e2) {
-				Bukkit.getConsoleSender().sendMessage("§cFalha ao conectar ao MySQL!");
-			}
-		}
-		m = this;
-		BanConfig.create();
-		BanConfig.SaveConfig();
-		IpBanConfig.create();
-		IpBanConfig.SaveConfig();
-		IpBanConfig2.create();
-		IpBanConfig2.SaveConfig();
-		ReportesConfig.create();
-		ReportesConfig.SaveConfig();
-		MotivoReportConfig.create();
-		MotivoReportConfig.SaveConfig();
-		MuteConfig.Create();
-		MuteConfig.Save();
-		WarnConfig.Create();
-		WarnConfig.Save();
-		TempMuteConfig.Create();
-		TempMuteConfig.Save();
-		TempBanConfig.create();
-		TempBanConfig.SaveConfig();
-		StatusConfig.Create();
-		StatusConfig.Save();
-		Bukkit.getPluginManager().registerEvents(new MessageNormal(), this);
-		Bukkit.getPluginManager().registerEvents(new JoinBan(), this);
-		Bukkit.getPluginManager().registerEvents(new InventoryClick(), this);
-		Bukkit.getPluginManager().registerEvents(new APIGeral(), this);
-		getCommand("ban").setExecutor(new BanC());
-		getCommand("ipban").setExecutor(new IpBanC());
-		getCommand("unban").setExecutor(new UnbanC());
-		getCommand("ipunban").setExecutor(new IpUnbanC());
-		getCommand("mute").setExecutor(new MuteC());
-		getCommand("mutar").setExecutor(new MuteC());
-		getCommand("unmute").setExecutor(new UnmuteC());
-		getCommand("unwarn").setExecutor(new UnwarnC());
-		getCommand("kick").setExecutor(new KickC());
-		getCommand("tempban").setExecutor(new TempBanC());
-		getCommand("tempmute").setExecutor(new TempMuteC());
-		getCommand("warn").setExecutor(new WarnC());
-		getCommand("reportes").setExecutor(new ReportesC());
-		getCommand("reportar").setExecutor(new ReportarC());
-		getCommand("verificar").setExecutor(new VerificarC());
-		new BukkitRunnable() {
-			public void run() {
-				if (APIGeral.getBan() == 0)
-					return;
-				if (Main.m.getConfig().getBoolean("WatchDog.Ativado") == true) {
-					List<String> messagesStatus = Main.m.getConfig().getStringList("WatchDog.Menssagem");
-					String messageStatus = "";
-					for (String mStatus : messagesStatus) {
-						messageStatus += mStatus.replace("&", "§").replace("%pb", String.valueOf(APIGeral.getBan()))
-								.replace("%pm", String.valueOf(APIGeral.getMute()));
-						messageStatus += "\n";
-					}
-					Bukkit.broadcastMessage(messageStatus);
-				}
-			}
-		}.runTaskTimer(this, 0L, Integer.valueOf(Main.m.getConfig().getString("WatchDog.Tempo")) * 1200L);
-	}
+public class ss implements CommandExecutor, Listener
+{
+    public static Configuration config2;
+    public static ArrayList<String> bloq;
+    public static HashMap<String, String> staff;
+    
+    static {
+        ss.config2 = new Configuration("locs.yml");
+        ss.bloq = new ArrayList<String>();
+        ss.staff = new HashMap<String, String>();
+    }
+    
+    public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("§cVoce nao e um jogador!");
+            return true;
+        }
+        final Player p = (Player)sender;
+        if (cmd.getName().equalsIgnoreCase("ss") || cmd.getName().equalsIgnoreCase("screenshare")) {
+            if (p.hasPermission("pomba.ss")) {
+                if (args.length == 0) {
+                    p.sendMessage("§7Use /ss help");
+                    return true;
+                }
+                final String nick = args[0];
+                if (args.length == 1) {
+                    if (Bukkit.getPlayer(nick) != null) {
+                        if (!ss.config2.contains("locs.")) {
+                            p.sendMessage("§cO spawn da SS n\u00e3o esta setado!");
+                            p.sendMessage("§cUse /ss lobbyset");
+                            return true;
+                        }
+                        final Player ss = Bukkit.getPlayer(nick);
+                        if (PombaSS.cmds.ss.staff.containsKey(p.getName()) && !PombaSS.cmds.ss.bloq.contains(p.getName())) {
+                            p.sendMessage("§cVoc\u00ea puxou um jogador pra SS recentemente e n\u00e3o liberou ele!");
+                            p.sendMessage("§7Use /ss liberar <jogador>");
+                            return true;
+                        }
+                        if (PombaSS.cmds.ss.bloq.contains(ss.getName())) {
+                            p.sendMessage("§7Esse jogador j\u00e1 est\u00e1 em uma screenshare!");
+                            return true;
+                        }
+                        final int v = 3;
+                        final String puxou = "§cVoce foi puxado pra &e&lSS!";
+                        for (int i = 0; i < v; ++i) {
+                            ss.sendMessage(puxou);
+                        }
+                        p.sendMessage("§a" + ss.getName() + " §7foi puxado com sucesso!");
+                        TitleAPI.create(p,"§c" + ss.getName(), "§afoi puxado pra SS!", 20,20,20);
+                        final Location loc = new Location(Bukkit.getWorld(PombaSS.cmds.ss.config2.getString("locs..world")), PombaSS.cmds.ss.config2.getDouble("locs..x"), PombaSS.cmds.ss.config2.getDouble("locs..y"), PombaSS.cmds.ss.config2.getDouble("locs..z"));
+                        ss.teleport(loc);
+                        ss.teleport(ss.getLocation());
+                        p.teleport(ss.getLocation());
+                        PombaSS.cmds.ss.staff.put(p.getName(), ss.getName());
+                        PombaSS.cmds.ss.staff.put(ss.getName(), p.getName());
+                        PombaSS.cmds.ss.bloq.add(ss.getName());
+                        return true;
+                    }
+                    else {
+                        p.sendMessage("§cEsse jogador n\u00e3o est\u00e1 online!");
+                    }
+                }
+            }
+            else {
+                p.sendMessage("§cVoc\u00ea n\u00e3o possui permiss\u00e3o!");
+            }
+        }
+        if (cmd.getName().equalsIgnoreCase("ss") && args[0].equalsIgnoreCase("list")) {
+            if (p.hasPermission("pomba.ss")) {
+                if (args.length == 1) {
+                    p.sendMessage("§a§lJOGADORES EM SS:");
+                    p.sendMessage(" ");
+                    if (ss.bloq.size() >= 1) {
+                        for (int j = 0; j < ss.bloq.size(); ++j) {
+                            p.sendMessage(" §b" + ss.bloq.get(j));
+                        }
+                    }
+                    else {
+                        p.sendMessage(" §cNenhum jogador em SS!");
+                    }
+                    p.sendMessage(" ");
+                    return true;
+                }
+            }
+            else {
+                p.sendMessage("§cVoc\u00ea n\u00e3o possui permiss\u00e3o!");
+            }
+        }
+        if (cmd.getName().equalsIgnoreCase("ss") && args[0].equalsIgnoreCase("liberar")) {
+            if (p.hasPermission("pomba.ss")) {
+                if (args.length != 2) {
+                    p.sendMessage("§7Use /ss liberar <jogador>");
+                    return true;
+                }
+                final String name = args[1];
+                    if (ss.bloq.contains(name)) {
+                        if (ss.staff.containsKey(name)) {
+                            if (ss.staff.get(name).equalsIgnoreCase(p.getName())) {
+                                p.sendMessage("§aVoc\u00ea liberou §a" + name + " §7da SS!");
+                                final Player pname = Bukkit.getPlayer(name);
+                                ss.staff.remove(p.getName(), name);
+                                ss.staff.remove(name, p.getName());
+                                ss.bloq.remove(name);
+                                if (pname != null) {
+                                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tp world 0 225 -17 " + p.getName());
+                                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tp world 0 225 -17 " + pname.getName());
+                                    pname.sendMessage("§aVoc\u00ea foi liberado da ss");
+                                }
+                                return true;
+                            }
+                            p.sendMessage("§cSomente quem puxou esse jogador pra SS pode libera-lo.");
+                        }
+                    }
+                    else {
+                        p.sendMessage("§cEsse jogador n\u00e3o est\u00e1 em SS!");
+                    }
+            }
+            else {
+                p.sendMessage("§cVoc\u00ea n\u00e3o possui permiss\u00e3o!");
+            }
+        }
+        if (cmd.getName().equalsIgnoreCase("ss")  && args[0].equalsIgnoreCase("lobbyset")) {
+            if (p.hasPermission("pomba.ss")) {
+                if (args.length == 1) {
+                    p.sendMessage("§7Voc\u00ea setou o lobby do SS com §asucesso!");
+                    ss.config2.set("locs..world", p.getWorld().getName());
+                    ss.config2.set("locs..x", p.getLocation().getX());
+                    ss.config2.set("locs..y", p.getLocation().getY());
+                    ss.config2.set("locs..z", p.getLocation().getZ());
+                    ss.config2.saveConfig();
+                    return true;
+                }
+            }
+            else {
+                p.sendMessage("§cVoc\u00ea n\u00e3o possui permiss\u00e3o!");
+            }
+        }
+        if (cmd.getName().equalsIgnoreCase("ss") && args[0].equalsIgnoreCase("help")) {
+            if (!p.hasPermission("pomba.ss")) {
+                p.sendMessage("§cVoc\u00ea n\u00e3o possui permiss\u00e3o!");
+                p.sendMessage("§aPlugin de SS criado por flationdev! O MAIS BRABO!");
+                return true;
+            }
+            if (args.length == 1) {
+                p.sendMessage(" ");
+                p.sendMessage("§7Use /ss <jogador> - §bPara puxar um jogador pra SS");
+                p.sendMessage("§7Use /ss lobbyset - §bPara setar o spawn do SS");
+                p.sendMessage("§7Use /ss list - §bPara ver a lista dos jogadores em SS");
+                p.sendMessage("§7Use /ss liberar - §bPara liberar um jogador da SS");
+                p.sendMessage(" ");
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void quit(final PlayerQuitEvent e) {
+        final Player p = e.getPlayer();
+        if (ss.bloq.contains(p.getName()) && ss.staff.containsKey(p.getName())) {
+            final String namep = ss.staff.get(p.getName());
+            final Player staffa = Bukkit.getPlayer(namep);
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban " + namep + " Deslogar em ScreenShare");
+            ss.bloq.remove(p.getName());
+            ss.staff.remove(staffa.getName(), p.getName());
+            ss.staff.remove(p.getName(), staffa.getName());
+        }
+    }
+    
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void quitb(final PlayerCommandPreprocessEvent e) {
+        final Player p = e.getPlayer();
+        if (ss.bloq.contains(p.getName())) {
+            e.setCancelled(true);
+            p.sendMessage("§cVoc\u00ea esta em SS e n\u00e3o pode executar um comando at\u00e9 ser liberado!");
+        }
+    }
 }
