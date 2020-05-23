@@ -23,8 +23,8 @@ public class TempMuteC implements CommandExecutor {
 		String allArgs = sb.toString().trim();
 		if (label.equalsIgnoreCase("tempmute")) {
 			if (!sender.hasPermission("HBans.TempMute")) {
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("SemPermissao").replace("&", "ง"));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("SemPermissao").replace("&", "ยง"));
 				return true;
 			}
 			if (args.length >= 4) {
@@ -32,14 +32,14 @@ public class TempMuteC implements CommandExecutor {
 				if (t != null) {
 
 					if (APIGeral.CheckTempMute(t) == true) {
-						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-								+ Main.m.getConfig().getString("JaMute").replace("&", "ง"));
+						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+								+ Main.m.getConfig().getString("JaMute").replace("&", "ยง"));
 						return true;
 					}
 					
 					if (t.hasPermission("HBans.Imune.TempMute")){
-						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-								+ Main.m.getConfig().getString("PlayerImune").replace("&", "ง"));
+						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+								+ Main.m.getConfig().getString("PlayerImune").replace("&", "ยง"));
 						return true;
 					}
 					long endOfBan = System.currentTimeMillis() + TimeAPI.getTicks(args[2], Integer.parseInt(args[1]));
@@ -49,16 +49,17 @@ public class TempMuteC implements CommandExecutor {
 
 					if (diff > 0) {
 						APIGeral.TempMute(sender.getName(), t.getName(), allArgs, endOfBan);
+						APIGeral.addMute();
 					}
 
 				} else {
-					sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-							+ Main.m.getConfig().getString("PlayerOff").replace("&", "ง"));
+					sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+							+ Main.m.getConfig().getString("PlayerOff").replace("&", "ยง"));
 				}
 				return true;
 			} else {
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("TempMuteI").replace("&", "ง"));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("TempMuteI").replace("&", "ยง"));
 			}
 		}
 		return false;
