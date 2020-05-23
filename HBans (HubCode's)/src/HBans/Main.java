@@ -3,12 +3,14 @@ package HBans;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import HBans.Comandos.BanC;
 import HBans.Comandos.IpBanC;
@@ -30,6 +32,7 @@ import HBans.Config.IpBanConfig2;
 import HBans.Config.MotivoReportConfig;
 import HBans.Config.MuteConfig;
 import HBans.Config.ReportesConfig;
+import HBans.Config.StatusConfig;
 import HBans.Config.TempBanConfig;
 import HBans.Config.TempMuteConfig;
 import HBans.Config.WarnConfig;
@@ -57,13 +60,13 @@ public class Main extends JavaPlugin {
 
 		if (getConfig().getBoolean("Discord") == true) {
 			if (getConfig().getString("Bot.Token").equalsIgnoreCase("XXX-XXX-XXX-XXX")) {
-				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Token inválido, plugin desabilitado");
+				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Token invÃ¡lido, plugin desabilitado");
 				return;
 			} else if (getConfig().getString("Bot.Canal").equalsIgnoreCase("XXX-XXX-XXX-XXX")) {
-				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Canal inválido, plugin desabilitado");
+				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Canal invÃ¡lido, plugin desabilitado");
 				return;
 			} else if (getConfig().getString("Bot.Canal-Reportes").equalsIgnoreCase("XXX-XXX-XXX-XXX")) {
-				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Canal inválido, plugin desabilitado");
+				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Canal invÃ¡lido, plugin desabilitado");
 				return;
 			}
 
@@ -95,7 +98,7 @@ public class Main extends JavaPlugin {
 				Data.statement = conn.createStatement();
 				Data.CriarTabela();
 			} catch (Exception e2) {
-				Bukkit.getConsoleSender().sendMessage("§cFalha ao conectar ao MySQL!");
+				Bukkit.getConsoleSender().sendMessage("Â§cFalha ao conectar ao MySQL!");
 			}
 		}
 		m = this;
@@ -117,6 +120,8 @@ public class Main extends JavaPlugin {
 		TempMuteConfig.Save();
 		TempBanConfig.create();
 		TempBanConfig.SaveConfig();
+		StatusConfig.Create();
+		StatusConfig.Save();
 		Bukkit.getPluginManager().registerEvents(new MessageNormal(), this);
 		Bukkit.getPluginManager().registerEvents(new JoinBan(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryClick(), this);
@@ -136,5 +141,21 @@ public class Main extends JavaPlugin {
 		getCommand("reportes").setExecutor(new ReportesC());
 		getCommand("reportar").setExecutor(new ReportarC());
 		getCommand("verificar").setExecutor(new VerificarC());
+		new BukkitRunnable() {
+			public void run() {
+				if (APIGeral.getBan() == 0)
+					return;
+				if (Main.m.getConfig().getBoolean("WatchDog.Ativado") == true) {
+					List<String> messagesStatus = Main.m.getConfig().getStringList("WatchDog.Menssagem");
+					String messageStatus = "";
+					for (String mStatus : messagesStatus) {
+						messageStatus += mStatus.replace("&", "Â§").replace("%pb", String.valueOf(APIGeral.getBan()))
+								.replace("%pm", String.valueOf(APIGeral.getMute()));
+						messageStatus += "\n";
+					}
+					Bukkit.broadcastMessage(messageStatus);
+				}
+			}
+		}.runTaskTimer(this, 0L, Integer.valueOf(Main.m.getConfig().getString("WatchDog.Tempo")) * 1200L);
 	}
 }
