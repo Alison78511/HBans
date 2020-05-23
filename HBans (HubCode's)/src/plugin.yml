@@ -1,8 +1,8 @@
-main: FBans.Main
+main: HBans.Main
 version: 5.4
-author: FlashDev
+author: Alison
 description: Plugin de bans com integração twitter e discord totalmente configuravel
-name: FBans
+name: HBans
 commands:
  ban:
  ipban:
