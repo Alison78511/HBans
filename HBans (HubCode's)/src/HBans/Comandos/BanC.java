@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import HBans.Main;
 import HBans.EventApi.APIGeral;
+import HBans.EventApi.BanEvent;
 
 public class BanC implements CommandExecutor {
 
@@ -16,9 +17,9 @@ public class BanC implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (label.equalsIgnoreCase("ban")) {
-			if (!sender.hasPermission("HBans.ban")) {
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
-						+ Main.m.getConfig().getString("SemPermissao").replace("&", "ยง"));
+			if (!sender.hasPermission("hbans.ban")) {
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
+						+ Main.m.getConfig().getString("SemPermissao").replace("&", "ง"));
 				return true;
 			}
 			if (args.length >= 2) {
@@ -33,35 +34,39 @@ public class BanC implements CommandExecutor {
 				OfflinePlayer targetoff = Bukkit.getOfflinePlayer(args[0]);
 				if (targeton != null) {
 					if (APIGeral.CheckBan(targeton.getName()) == true) {
-						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
-								+ Main.m.getConfig().getString("JaBanido").replace("&", "ยง"));
+						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
+								+ Main.m.getConfig().getString("JaBanido").replace("&", "ง"));
 						return true;
 					}
-					if (targeton.hasPermission("HBans.Imune.Ban")){
-						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
-								+ Main.m.getConfig().getString("PlayerImune").replace("&", "ยง"));
+					if (targeton.hasPermission("hbans.Imune.Ban")){
+						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
+								+ Main.m.getConfig().getString("PlayerImune").replace("&", "ง"));
 						return true;
 					}
 
 					APIGeral.Ban(sender.getName(), targeton, allArgs, true, targeton.getName());
 					APIGeral.addBan();
+					BanEvent event = new BanEvent(sender.getName(), allArgs, targeton.getName());
+					Bukkit.getServer().getPluginManager().callEvent(event);
 
 				} else {
 					if (APIGeral.CheckBan(targetoff.getName()) == true) {
-						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
-								+ Main.m.getConfig().getString("JaBanido").replace("&", "ยง"));
+						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
+								+ Main.m.getConfig().getString("JaBanido").replace("&", "ง"));
 						return true;
 					}
 
 					APIGeral.Ban(sender.getName(), targetoff.getPlayer(), allArgs, false, args[0]);
 					APIGeral.addBan();
+					BanEvent event = new BanEvent(sender.getName(), allArgs, targetoff.getName());
+					Bukkit.getServer().getPluginManager().callEvent(event);
 
 				}
 				return true;
 
 			} else {
-				sender.sendMessage((Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
-						+ Main.m.getConfig().getString("BanI").replace("&", "ยง")));
+				sender.sendMessage((Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
+						+ Main.m.getConfig().getString("BanI").replace("&", "ง")));
 			}
 		}
 

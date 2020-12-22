@@ -17,7 +17,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import HBans.Main;
 import HBans.Config.MotivoReportConfig;
 import HBans.Config.ReportesConfig;
-import HBans.Mysql.Data;
 
 public class ReportesC implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -26,7 +25,7 @@ public class ReportesC implements CommandExecutor {
 		}
 		Player s = (Player) sender;
 		if (label.equalsIgnoreCase("reportes")) {
-			if (!sender.hasPermission("HBans.reportes")) {
+			if (!sender.hasPermission("hbans.reportes")) {
 				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "§") + " "
 						+ Main.m.getConfig().getString("SemPermissao"));
 				return true;
@@ -66,15 +65,9 @@ public class ReportesC implements CommandExecutor {
 					sm.setOwner(p);
 					sm.setDisplayName("§c" + p);
 					lores.add("");
-					if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
-						lores.add("§7Reporter: §c" + Data.getReporter(p));
-						lores.add("§7Motivo: §c" + Data.getReportMotivo(p));
-						lores.add("§7Data: §c" + Data.getReportData(p));
-					} else {
-						lores.add("§7Reporter: §c" + MotivoReportConfig.fc.getString(p + ".Reporter"));
-						lores.add("§7Motivo: §c" + MotivoReportConfig.fc.getString(p + ".Motivo"));
-						lores.add("§7Data: §c" + MotivoReportConfig.fc.getString(p + ".Data"));
-					}
+					lores.add("§7Reporter: §c" + MotivoReportConfig.fc.getString(p + ".Reporter"));
+					lores.add("§7Motivo: §c" + MotivoReportConfig.fc.getString(p + ".Motivo"));
+					lores.add("§7Data: §c" + MotivoReportConfig.fc.getString(p + ".Data"));
 					lores.add("");
 					lores.add("§7Botão Esquerdo: §cAceita a denúncia");
 					lores.add("§7Botão Direito: §cNega a denúncia");
@@ -93,10 +86,6 @@ public class ReportesC implements CommandExecutor {
 	}
 
 	public static List<String> getReportList() {
-		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
-			return Data.getReporteds();
-		} else {
-			return ReportesConfig.fc.getStringList("Reportados");
-		}
+		return ReportesConfig.fc.getStringList("Reportados");
 	}
 }

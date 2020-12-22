@@ -14,7 +14,7 @@ public class WarnC implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (label.equalsIgnoreCase("warn")) {
-			if (!sender.hasPermission("HBans.warn")) {
+			if (!sender.hasPermission("hbans.warn")) {
 				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "§") + " "
 						+ Main.m.getConfig().getString("SemPermissao").replace("&", "§"));
 				return true;
@@ -35,7 +35,7 @@ public class WarnC implements CommandExecutor {
 			if (args.length >= 1) {
 				if (t != null) {
 
-					if (t.hasPermission("HBans.Imune.Warn")) {
+					if (t.hasPermission("hbans.Imune.Warn")) {
 						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "§") + " "
 								+ Main.m.getConfig().getString("PlayerImune").replace("&", "§"));
 						return true;

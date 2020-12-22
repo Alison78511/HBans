@@ -12,48 +12,63 @@ import HBans.Main;
 import HBans.Config.BanConfig;
 import HBans.Config.IpBanConfig;
 import HBans.Config.IpBanConfig2;
+import HBans.Config.IpConfig;
 import HBans.Config.MotivoReportConfig;
 import HBans.Config.MuteConfig;
 import HBans.Config.ReportesConfig;
+import HBans.Config.StatusConfig;
 import HBans.Config.TempBanConfig;
 import HBans.Config.TempMuteConfig;
 import HBans.Config.WarnConfig;
 import HBans.Mysql.Data;
 import fr.galaxyoyo.spigot.twitterapi.TwitterAPI;
-import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 public class APIGeral implements Listener {
 
 	public static void Ban(String Staff, Player p, String Motivo, boolean Online, String Player) {
 
 		// DataBase
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
-			Data.ban(Player, Staff, Motivo);
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
+			Data.ban(Player, Staff, Motivo.replace("-s", ""));
 		} else {
-			BanConfig.fc.set(Player + ".motivo", Motivo);
+			BanConfig.fc.set(Player + ".motivo", Motivo.replace("-s", ""));
 			BanConfig.fc.set(Player + ".Staff", Staff);
 			BanConfig.SaveConfig();
 		}
 		// DataBase
 
-		// Broadcast
-		List<String> messagesbanon = Main.m.getConfig().getStringList("Ban");
-		String messagebanon = "";
-		for (String mbanon : messagesbanon) {
-			messagebanon += mbanon.replace("&", "ง").replace("%b", Player).replace("%m", Motivo).replace("%sender",
-					Staff);
-			messagebanon += "\n";
+		if (!Motivo.contains("-s")) {
+			// Broadcast
+			List<String> messagesbanon = Main.m.getConfig().getStringList("Ban");
+			String messagebanon = "";
+			for (String mbanon : messagesbanon) {
+				messagebanon += mbanon.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo).replace("%sender",
+						Staff);
+				messagebanon += "\n";
+			}
+			Bukkit.broadcastMessage(messagebanon);
+			// Broadcast
+		} else {
+			// Broadcast
+			List<String> messagesbanon = Main.m.getConfig().getStringList("BanSilent");
+			String messagebanon = "";
+			for (String mbanon : messagesbanon) {
+				messagebanon += mbanon.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
+						.replace("%sender", Staff);
+				messagebanon += "\n";
+			}
+			Bukkit.getPlayer(Staff).sendMessage(messagebanon);
+			// Broadcast
 		}
-		Bukkit.broadcastMessage(messagebanon);
-		// Broadcast
 
 		// Twitter
 		if (Main.m.getConfig().getBoolean("Twitter") == true) {
 			List<String> messagesbant = Main.m.getConfig().getStringList("BanT");
 			String messagebant = "";
 			for (String mbant : messagesbant) {
-				messagebant += mbant.replace("&", "ง").replace("%b", Player).replace("%m", Motivo).replace("%sender",
-						Staff);
+				messagebant += mbant.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
+						.replace("%sender", Staff);
 				messagebant += "\n";
 			}
 			TwitterAPI.instance().tweet(messagebant);
@@ -65,8 +80,8 @@ public class APIGeral implements Listener {
 			List<String> messagesband = Main.m.getConfig().getStringList("BanD.Mensagem");
 			String messageband = "";
 			for (String mband : messagesband) {
-				messageband += mband.replace("&", "ง").replace("%b", Player).replace("%m", Motivo).replace("%sender",
-						Staff);
+				messageband += mband.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
+						.replace("%sender", Staff);
 				messageband += "\n";
 			}
 			EmbedBuilder embed = new EmbedBuilder();
@@ -87,7 +102,8 @@ public class APIGeral implements Listener {
 			List<String> messagesbanlogin = Main.m.getConfig().getStringList("BanLogin");
 			String messagebanlogin = "";
 			for (String mbanlogin : messagesbanlogin) {
-				messagebanlogin += mbanlogin.replace("&", "ง").replace("%m", Motivo).replace("%sender", Staff);
+				messagebanlogin += mbanlogin.replace("&", "ยง").replace("%m", Motivo.replace("-s", ""))
+						.replace("%sender", Staff);
 				messagebanlogin += "\n";
 			}
 			p.kickPlayer(messagebanlogin);
@@ -96,7 +112,7 @@ public class APIGeral implements Listener {
 	}
 
 	public static boolean CheckBan(String Player) {
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
 			if (Data.checkban(Player)) {
 				return true;
 			} else {
@@ -116,33 +132,47 @@ public class APIGeral implements Listener {
 		String Player = p.getName();
 
 		// DataBase
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
-			Data.ipban(Ip, Player, Staff, Motivo);
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
+			Data.ipban(Ip, Player, Staff, Motivo.replace("-s", ""));
 		} else {
-			IpBanConfig.fc.set(Ip.replace(".", "-") + ".motivo", Motivo);
+			IpBanConfig.fc.set(Ip.replace(".", "-") + ".motivo", Motivo.replace("-s", ""));
 			IpBanConfig.fc.set(Ip.replace(".", "-") + ".Staff", Staff);
 			IpBanConfig2.fc.set(Player + ".Ip", Ip.replace("-", "."));
 			IpBanConfig2.SaveConfig();
 		}
 		// DataBase
 
-		// Broadcast
-		List<String> messagesbanon = Main.m.getConfig().getStringList("IpBan");
-		String messagebanon = "";
-		for (String mbanon : messagesbanon) {
-			messagebanon += mbanon.replace("&", "ง").replace("%b", Player).replace("%m", Motivo).replace("%sender",
-					Staff);
-			messagebanon += "\n";
+		if (!Motivo.contains("-s")) {
+			// Broadcast
+			List<String> messagesbanon = Main.m.getConfig().getStringList("IpBan");
+			String messagebanon = "";
+			for (String mbanon : messagesbanon) {
+				messagebanon += mbanon.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo).replace("%sender",
+						Staff);
+				messagebanon += "\n";
+			}
+			Bukkit.broadcastMessage(messagebanon);
+			// Broadcast
+		} else {
+			// Broadcast
+			List<String> messagesbanon = Main.m.getConfig().getStringList("IpBan");
+			String messagebanon = "";
+			for (String mbanon : messagesbanon) {
+				messagebanon += mbanon.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
+						.replace("%sender", Staff);
+				messagebanon += "\n";
+			}
+			Bukkit.getPlayer(Staff).sendMessage("ยงf[Silent]");
+			Bukkit.getPlayer(Staff).sendMessage(messagebanon);
+			// Broadcast
 		}
-		Bukkit.broadcastMessage(messagebanon);
-		// Broadcast
 
 		// Twitter
 		if (Main.m.getConfig().getBoolean("Twitter") == true) {
 			List<String> messagesIpBanT = Main.m.getConfig().getStringList("IpBanT");
 			String messageIpBanT = "";
 			for (String mIpBanT : messagesIpBanT) {
-				messageIpBanT += mIpBanT.replace("&", "ง").replace("%b", Player).replace("%m", Motivo)
+				messageIpBanT += mIpBanT.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
 						.replace("%sender", Staff);
 				messageIpBanT += "\n";
 			}
@@ -155,7 +185,7 @@ public class APIGeral implements Listener {
 			List<String> messagesIpBanD = Main.m.getConfig().getStringList("IpBanD.Mensagem");
 			String messageIpBanD = "";
 			for (String mIpBanD : messagesIpBanD) {
-				messageIpBanD += mIpBanD.replace("&", "ง").replace("%b", Player).replace("%m", Motivo)
+				messageIpBanD += mIpBanD.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
 						.replace("%sender", Staff);
 				messageIpBanD += "\n";
 			}
@@ -176,24 +206,23 @@ public class APIGeral implements Listener {
 		List<String> messagesIpBanLogin = Main.m.getConfig().getStringList("IpBanLogin");
 		String messageIpBanLogin = "";
 		for (String mIpBanLogin : messagesIpBanLogin) {
-			messageIpBanLogin += mIpBanLogin.replace("&", "ง").replace("%b", Player).replace("%m", Motivo)
-					.replace("%sender", Staff);
+			messageIpBanLogin += mIpBanLogin.replace("&", "ยง").replace("%b", Player)
+					.replace("%m", Motivo.replace("-s", "")).replace("%sender", Staff);
 			messageIpBanLogin += "\n";
 		}
 		p.kickPlayer(messageIpBanLogin);
 		// KickPlayer
 	}
 
-	public static boolean CheckIpBan(Player p) {
-		String Player = p.getName();
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
-			if (Data.checkipban(Player)) {
+	public static boolean CheckIpBan(String ip) {
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
+			if (Data.checkbanip(ip.replace("-", "."))) {
 				return true;
 			} else {
 				return false;
 			}
 		} else {
-			if (IpBanConfig.fc.contains(p.getAddress().getHostName().replace(".", "-"))) {
+			if (IpBanConfig.fc.contains(ip)) {
 				return true;
 			} else {
 				return false;
@@ -204,23 +233,37 @@ public class APIGeral implements Listener {
 	public static void Kick(String Staff, Player p, String Motivo) {
 		String Player = p.getName();
 
-		// Kick
-		List<String> messagesKick = Main.m.getConfig().getStringList("Kick");
-		String messageKick = "";
-		for (String mKick : messagesKick) {
-			messageKick += mKick.replace("&", "ง").replace("%b", Player).replace("%m", Motivo).replace("%sender",
-					Staff);
-			messageKick += "\n";
+		if (!Motivo.contains("-s")) {
+			// Kick
+			List<String> messagesKick = Main.m.getConfig().getStringList("Kick");
+			String messageKick = "";
+			for (String mKick : messagesKick) {
+				messageKick += mKick.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo).replace("%sender",
+						Staff);
+				messageKick += "\n";
+			}
+			Bukkit.broadcastMessage(messageKick);
+			// Kick
+		} else {
+			// Broadcast
+			List<String> messagesbanon = Main.m.getConfig().getStringList("Kick");
+			String messagebanon = "";
+			for (String mbanon : messagesbanon) {
+				messagebanon += mbanon.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
+						.replace("%sender", Staff);
+				messagebanon += "\n";
+			}
+			Bukkit.getPlayer(Staff).sendMessage("ยงf[Silent]");
+			Bukkit.getPlayer(Staff).sendMessage(messagebanon);
+			// Broadcast
 		}
-		Bukkit.broadcastMessage(messageKick);
-		// Kick
 
 		// KickLogin
 		List<String> messageskicklogin = Main.m.getConfig().getStringList("KickLogin");
 		String messagekicklogin = "";
 		for (String mkicklogin : messageskicklogin) {
-			messagekicklogin += mkicklogin.replace("&", "ง").replace("%b", Player).replace("%m", Motivo)
-					.replace("%sender", Staff);
+			messagekicklogin += mkicklogin.replace("&", "ยง").replace("%b", Player)
+					.replace("%m", Motivo.replace("-s", "")).replace("%sender", Staff);
 			messagekicklogin += "\n";
 		}
 		p.kickPlayer(messagekicklogin);
@@ -231,31 +274,44 @@ public class APIGeral implements Listener {
 		String Player = p.getName();
 
 		// DataBase
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
-			Data.mute(Player, Staff, Motivo);
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
+			Data.mute(Player, Staff, Motivo.replace("-s", ""));
 		} else {
-			MuteConfig.fc.set(Player + ".motivo", Motivo);
+			MuteConfig.fc.set(Player + ".motivo", Motivo.replace("-s", ""));
 			MuteConfig.fc.set(Player + ".Staff", Staff);
 			MuteConfig.Save();
 		}
 		// DataBase
 
-		// Broadcast
-		List<String> messagesmute = Main.m.getConfig().getStringList("Mute");
-		String messagemute = "";
-		for (String mmute : messagesmute) {
-			messagemute += mmute.replace("&", "ง").replace("%b", Player).replace("%m", Motivo).replace("%sender",
-					Staff);
-			messagemute += "\n";
+		if (!Motivo.contains("-s")) {
+			// Broadcast
+			List<String> messagesmute = Main.m.getConfig().getStringList("Mute");
+			String messagemute = "";
+			for (String mmute : messagesmute) {
+				messagemute += mmute.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo).replace("%sender",
+						Staff);
+				messagemute += "\n";
+			}
+			Bukkit.broadcastMessage(messagemute);
+			// Broadcast
+		} else {
+			// Broadcast
+			List<String> messagesbanon = Main.m.getConfig().getStringList("MuteSilent");
+			String messagebanon = "";
+			for (String mbanon : messagesbanon) {
+				messagebanon += mbanon.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
+						.replace("%sender", Staff);
+				messagebanon += "\n";
+			}
+			Bukkit.getPlayer(Staff).sendMessage(messagebanon);
+			// Broadcast
 		}
-		Bukkit.broadcastMessage(messagemute);
-		// Broadcast
 
 		// PlayerMessage
 		List<String> messagesMuteChat = Main.m.getConfig().getStringList("MuteChat");
 		String messageMuteChat = "";
 		for (String mMuteChat : messagesMuteChat) {
-			messageMuteChat += mMuteChat.replace("&", "ง").replace("%b", Player).replace("%m", Motivo)
+			messageMuteChat += mMuteChat.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
 					.replace("%sender", Staff);
 			messageMuteChat += "\n";
 		}
@@ -267,8 +323,8 @@ public class APIGeral implements Listener {
 			List<String> messagesMuteT = Main.m.getConfig().getStringList("MuteT");
 			String messageMuteT = "";
 			for (String mMuteT : messagesMuteT) {
-				messageMuteT += mMuteT.replace("&", "ง").replace("%b", Player).replace("%m", Motivo).replace("%sender",
-						Staff);
+				messageMuteT += mMuteT.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
+						.replace("%sender", Staff);
 				messageMuteT += "\n";
 			}
 			TwitterAPI.instance().tweet(messageMuteT);
@@ -280,8 +336,8 @@ public class APIGeral implements Listener {
 			List<String> messagesMuteD = Main.m.getConfig().getStringList("MuteD.Mensagem");
 			String messageMuteD = "";
 			for (String mMuteD : messagesMuteD) {
-				messageMuteD += mMuteD.replace("&", "ง").replace("%b", Player).replace("%m", Motivo).replace("%sender",
-						Staff);
+				messageMuteD += mMuteD.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
+						.replace("%sender", Staff);
 				messageMuteD += "\n";
 			}
 			EmbedBuilder embed = new EmbedBuilder();
@@ -298,9 +354,9 @@ public class APIGeral implements Listener {
 		// Discord
 	}
 
-	public static boolean CheckMute(Player p) {
-		String Player = p.getName();
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
+	public static boolean CheckMute(String p) {
+		String Player = p;
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
 			if (Data.checkmute(Player)) {
 				return true;
 			} else {
@@ -320,21 +376,17 @@ public class APIGeral implements Listener {
 		String Reporter = Sender.getName();
 
 		// DataBase
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
-			Data.report(Player, Reporter, Motivo, DataT);
-		} else {
-			MotivoReportConfig.fc.set(Player + ".Reporter", Reporter);
-			MotivoReportConfig.fc.set(Player + ".Motivo", Motivo);
-			MotivoReportConfig.fc.set(Player + ".Data", DataT);
-			MotivoReportConfig.SaveConfig();
-			List<String> list = ReportesConfig.fc.getStringList("Reportados");
-			list.add(Player);
-			if (ReportesConfig.fc.getStringList("Reportados").contains(Player)) {
-				return;
-			}
-			ReportesConfig.fc.set("Reportados", list);
-			ReportesConfig.SaveConfig();
+		MotivoReportConfig.fc.set(Player + ".Reporter", Reporter);
+		MotivoReportConfig.fc.set(Player + ".Motivo", Motivo);
+		MotivoReportConfig.fc.set(Player + ".Data", DataT);
+		MotivoReportConfig.SaveConfig();
+		List<String> list = ReportesConfig.fc.getStringList("Reportados");
+		list.add(Player);
+		if (ReportesConfig.fc.getStringList("Reportados").contains(Player)) {
+			return;
 		}
+		ReportesConfig.fc.set("Reportados", list);
+		ReportesConfig.SaveConfig();
 		// DataBase
 
 		// StaffMessage
@@ -346,7 +398,7 @@ public class APIGeral implements Listener {
 				List<String> messagesStaff = Main.m.getConfig().getStringList("ReportS");
 				String messageStaff = "";
 				for (String mStaff : messagesStaff) {
-					messageStaff += mStaff.replace("&", "ง").replace("%m", Motivo).replace("%sender", Reporter)
+					messageStaff += mStaff.replace("&", "ยง").replace("%m", Motivo).replace("%sender", Reporter)
 							.replace("%b", Player);
 					messageStaff += "\n";
 				}
@@ -359,7 +411,7 @@ public class APIGeral implements Listener {
 		List<String> messagesReporter = Main.m.getConfig().getStringList("Report");
 		String messageReporter = "";
 		for (String mReporter : messagesReporter) {
-			messageReporter += mReporter.replace("&", "ง").replace("%m", Motivo).replace("%sender", Reporter)
+			messageReporter += mReporter.replace("&", "ยง").replace("%m", Motivo).replace("%sender", Reporter)
 					.replace("%b", Player);
 			messageReporter += "\n";
 		}
@@ -408,34 +460,47 @@ public class APIGeral implements Listener {
 		String Tempo = TimeAPI.getMSG(endOfBan);
 
 		// DataBase
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
-			Data.tempban(Player, Staff, Motivo, endOfBan);
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
+			Data.tempban(Player, Staff, Motivo.replace("-s", ""), endOfBan);
 		} else {
 			TempBanConfig.fc.set(Target + ".Staff", Staff);
-			TempBanConfig.fc.set(Target + ".Motivo", Motivo);
+			TempBanConfig.fc.set(Target + ".Motivo", Motivo.replace("-s", ""));
 			TempBanConfig.fc.set(Target + ".Tempo", endOfBan);
 			TempBanConfig.SaveConfig();
 		}
 		// DataBase
 
-		// Broadcast
-		List<String> messagesTempBanon = Main.m.getConfig().getStringList("TempBan");
-		String messageTempBanon = "";
-		for (String mTempBanon : messagesTempBanon) {
-			messageTempBanon += mTempBanon.replace("&", "ง").replace("%b", Player).replace("%m", Motivo)
-					.replace("%sender", Staff).replace("%t", Tempo);
-			messageTempBanon += "\n";
+		if (!Motivo.contains("-s")) {
+			// Broadcast
+			List<String> messagesTempBanon = Main.m.getConfig().getStringList("TempBan");
+			String messageTempBanon = "";
+			for (String mTempBanon : messagesTempBanon) {
+				messageTempBanon += mTempBanon.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo)
+						.replace("%sender", Staff).replace("%t", Tempo);
+				messageTempBanon += "\n";
+			}
+			Bukkit.broadcastMessage(messageTempBanon);
+			// Broadcast
+		} else {
+			// Broadcast
+			List<String> messagesbanon = Main.m.getConfig().getStringList("TempBanSilent");
+			String messagebanon = "";
+			for (String mbanon : messagesbanon) {
+				messagebanon += mbanon.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
+						.replace("%sender", Staff).replace("%t", Tempo);
+				messagebanon += "\n";
+			}
+			Bukkit.getPlayer(Staff).sendMessage(messagebanon);
+			// Broadcast
 		}
-		Bukkit.broadcastMessage(messageTempBanon);
-		// Broadcast
 
 		// Twitter
 		if (Main.m.getConfig().getBoolean("Twitter") == true) {
 			List<String> messagesTempBant = Main.m.getConfig().getStringList("TempBanT");
 			String messageTempBant = "";
 			for (String mTempBant : messagesTempBant) {
-				messageTempBant += mTempBant.replace("&", "ง").replace("%b", Player).replace("%m", Motivo)
-						.replace("%sender", Staff).replace("%t", Tempo);
+				messageTempBant += mTempBant.replace("&", "ยง").replace("%b", Player)
+						.replace("%m", Motivo.replace("-s", "")).replace("%sender", Staff).replace("%t", Tempo);
 				messageTempBant += "\n";
 			}
 			TwitterAPI.instance().tweet(messageTempBant);
@@ -447,8 +512,8 @@ public class APIGeral implements Listener {
 			List<String> messagesTempBand = Main.m.getConfig().getStringList("TempBanD.Mensagem");
 			String messageTempBand = "";
 			for (String mTempBand : messagesTempBand) {
-				messageTempBand += mTempBand.replace("&", "ง").replace("%b", Player).replace("%m", Motivo)
-						.replace("%sender", Staff).replace("%t", Tempo);
+				messageTempBand += mTempBand.replace("&", "ยง").replace("%b", Player)
+						.replace("%m", Motivo.replace("-s", "")).replace("%sender", Staff).replace("%t", Tempo);
 				messageTempBand += "\n";
 			}
 			EmbedBuilder embed = new EmbedBuilder();
@@ -465,21 +530,21 @@ public class APIGeral implements Listener {
 		// Discord
 
 		// KickPlayer
-			List<String> messagesbanlogin = Main.m.getConfig().getStringList("TempBanLogin");
-			String messagebanlogin = "";
-			for (String mbanlogin : messagesbanlogin) {
-				messagebanlogin += mbanlogin.replace("&", "ง").replace("%b", Player).replace("%m", Motivo)
-						.replace("%sender", Staff).replace("%t", Tempo);
-				messagebanlogin += "\n";
-			}
-			p.kickPlayer(messagebanlogin);
+		List<String> messagesbanlogin = Main.m.getConfig().getStringList("TempBanLogin");
+		String messagebanlogin = "";
+		for (String mbanlogin : messagesbanlogin) {
+			messagebanlogin += mbanlogin.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
+					.replace("%sender", Staff).replace("%t", Tempo);
+			messagebanlogin += "\n";
+		}
+		p.kickPlayer(messagebanlogin);
 		// KickPlayer
 
 	}
 
 	public static boolean CheckTempBan(String p) {
 		String Player = p;
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
 			if (Data.checktempban(Player)) {
 				return true;
 			} else {
@@ -500,34 +565,47 @@ public class APIGeral implements Listener {
 		String Tempo = TimeAPI.getMSG(endOfMute);
 
 		// DataBase
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
-			Data.tempmute(Player, Staff, Motivo, endOfMute);
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
+			Data.tempmute(Player, Staff, Motivo.replace("-s", ""), endOfMute);
 		} else {
 			TempMuteConfig.fc.set(Target + ".Staff", Staff);
-			TempMuteConfig.fc.set(Target + ".Motivo", Motivo);
+			TempMuteConfig.fc.set(Target + ".Motivo", Motivo.replace("-s", ""));
 			TempMuteConfig.fc.set(Target + ".Tempo", endOfMute);
 			TempMuteConfig.Save();
 		}
 		// DataBase
 
-		// Broadcast
-		List<String> messagesTempMuteon = Main.m.getConfig().getStringList("TempMute");
-		String messageTempMuteon = "";
-		for (String mTempMuteon : messagesTempMuteon) {
-			messageTempMuteon += mTempMuteon.replace("&", "ง").replace("%b", Player).replace("%m", Motivo)
-					.replace("%sender", Staff).replace("%t", Tempo);
-			messageTempMuteon += "\n";
+		if (!Motivo.contains("-s")) {
+			// Broadcast
+			List<String> messagesTempMuteon = Main.m.getConfig().getStringList("TempMute");
+			String messageTempMuteon = "";
+			for (String mTempMuteon : messagesTempMuteon) {
+				messageTempMuteon += mTempMuteon.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo)
+						.replace("%sender", Staff).replace("%t", Tempo);
+				messageTempMuteon += "\n";
+			}
+			Bukkit.broadcastMessage(messageTempMuteon);
+			// Broadcast
+		} else {
+			// Broadcast
+			List<String> messagesbanon = Main.m.getConfig().getStringList("TempMuteSilent");
+			String messagebanon = "";
+			for (String mbanon : messagesbanon) {
+				messagebanon += mbanon.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
+						.replace("%sender", Staff).replace("%t", Tempo);
+				messagebanon += "\n";
+			}
+			Bukkit.getPlayer(Staff).sendMessage(messagebanon);
+			// Broadcast
 		}
-		Bukkit.broadcastMessage(messageTempMuteon);
-		// Broadcast
 
 		// Twitter
 		if (Main.m.getConfig().getBoolean("Twitter") == true) {
 			List<String> messagesTempMutet = Main.m.getConfig().getStringList("TempMuteT");
 			String messageTempMutet = "";
 			for (String mTempMutet : messagesTempMutet) {
-				messageTempMutet += mTempMutet.replace("&", "ง").replace("%b", Player).replace("%m", Motivo)
-						.replace("%sender", Staff).replace("%t", Tempo);
+				messageTempMutet += mTempMutet.replace("&", "ยง").replace("%b", Player)
+						.replace("%m", Motivo.replace("-s", "")).replace("%sender", Staff).replace("%t", Tempo);
 				messageTempMutet += "\n";
 			}
 			TwitterAPI.instance().tweet(messageTempMutet);
@@ -539,8 +617,8 @@ public class APIGeral implements Listener {
 			List<String> messagesTempMuted = Main.m.getConfig().getStringList("TempMuteD.Mensagem");
 			String messageTempMuted = "";
 			for (String mTempMuted : messagesTempMuted) {
-				messageTempMuted += mTempMuted.replace("&", "ง").replace("%b", Player).replace("%m", Motivo)
-						.replace("%sender", Staff).replace("%t", Tempo);
+				messageTempMuted += mTempMuted.replace("&", "ยง").replace("%b", Player)
+						.replace("%m", Motivo.replace("-s", "")).replace("%sender", Staff).replace("%t", Tempo);
 				messageTempMuted += "\n";
 			}
 			EmbedBuilder embed = new EmbedBuilder();
@@ -558,16 +636,16 @@ public class APIGeral implements Listener {
 
 	}
 
-	public static boolean CheckTempMute(Player p) {
-		String Player = p.getName();
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
+	public static boolean CheckTempMute(String p) {
+		String Player = p;
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
 			if (Data.checktempmute(Player)) {
 				return true;
 			} else {
 				return false;
 			}
 		} else {
-			if (TempMuteConfig.fc.contains(p.getName())) {
+			if (TempMuteConfig.fc.contains(Player)) {
 				return true;
 			} else {
 				return false;
@@ -577,74 +655,74 @@ public class APIGeral implements Listener {
 
 	public static void Unban(String p, CommandSender sender) {
 		String Player = p;
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
 			if (CheckBan(Player) == true) {
 				Data.unban(Player);
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("Unban").replace("&", "ง").replace("%b", p));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("Unban").replace("&", "ยง").replace("%b", p));
 			}
 			if (CheckTempBan(p) == true) {
 				Data.tempunban(Player);
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("Unban").replace("&", "ง").replace("%b", p));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("Unban").replace("&", "ยง").replace("%b", p));
 			} else {
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("JaUnban").replace("&", "ง"));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("JaUnban").replace("&", "ยง"));
 			}
 		} else {
 			if (CheckBan(Player) == true) {
 				BanConfig.fc.set(Player, null);
 				BanConfig.SaveConfig();
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("Unban").replace("&", "ง").replace("%b", p));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("Unban").replace("&", "ยง").replace("%b", p));
 			} else if (CheckTempBan(p) == true) {
 				TempBanConfig.fc.set(Player, null);
 				TempBanConfig.SaveConfig();
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("Unban").replace("&", "ง").replace("%b", p));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("Unban").replace("&", "ยง").replace("%b", p));
 			} else {
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("JaUnban").replace("&", "ง"));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("JaUnban").replace("&", "ยง"));
 			}
 		}
 	}
 
-	public static void Unmute(Player p, CommandSender sender) {
-		String Player = p.getName();
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
+	public static void Unmute(String p, CommandSender sender) {
+		String Player = p;
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
 			if (CheckMute(p) == true) {
 				Data.unmute(Player);
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("Unmute").replace("&", "ง").replace("%b", Player));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("Unmute").replace("&", "ยง").replace("%b", Player));
 			} else if (CheckTempMute(p) == true) {
 				Data.tempunmute(Player);
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("Unmute").replace("&", "ง").replace("%b", Player));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("Unmute").replace("&", "ยง").replace("%b", Player));
 			} else {
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("JaUnmute").replace("&", "ง"));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("JaUnmute").replace("&", "ยง"));
 			}
 		} else {
 			if (CheckMute(p) == true) {
 				MuteConfig.fc.set(Player, null);
 				MuteConfig.Save();
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("Unmute").replace("&", "ง").replace("%b", Player));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("Unmute").replace("&", "ยง").replace("%b", Player));
 			} else if (CheckTempMute(p) == true) {
 				TempMuteConfig.fc.set(Player, null);
 				TempMuteConfig.Save();
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("Unmute").replace("&", "ง").replace("%b", Player));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("Unmute").replace("&", "ยง").replace("%b", Player));
 			} else {
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
-						+ Main.m.getConfig().getString("JaUnmute").replace("&", "ง"));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+						+ Main.m.getConfig().getString("JaUnmute").replace("&", "ยง"));
 			}
 		}
 	}
 
 	public static int getWarns(Player p) {
 		String Player = p.getName();
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
 			return Data.getwarns(Player);
 		} else {
 			return WarnConfig.fc.getInt(Player + ".warns");
@@ -653,25 +731,25 @@ public class APIGeral implements Listener {
 
 	public static void Unwarn(Player p, String Modo, CommandSender sender) {
 		String Player = p.getName();
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
 			if (Modo.equalsIgnoreCase("Um")) {
-				sender.sendMessage(Main.m.getConfig().getString("Unwarn").replace("&", "ง").replace("%q", "1")
+				sender.sendMessage(Main.m.getConfig().getString("Unwarn").replace("&", "ยง").replace("%q", "1")
 						.replace("%sender", sender.getName()).replace("%b", Player));
 				Data.removewarn(Player, 1);
 			} else if (Modo.equalsIgnoreCase("Todos")) {
-				sender.sendMessage(Main.m.getConfig().getString("Unwarn").replace("&", "ง")
+				sender.sendMessage(Main.m.getConfig().getString("Unwarn").replace("&", "ยง")
 						.replace("%q", String.valueOf(Data.getwarns(Player))).replace("%sender", sender.getName())
 						.replace("%b", Player));
 				Data.unwarn(Player);
 			}
 		} else {
 			if (Modo.equalsIgnoreCase("Um")) {
-				sender.sendMessage(Main.m.getConfig().getString("Unwarn").replace("&", "ง").replace("%q", "1")
+				sender.sendMessage(Main.m.getConfig().getString("Unwarn").replace("&", "ยง").replace("%q", "1")
 						.replace("%sender", sender.getName()).replace("%b", Player));
 				WarnConfig.fc.set(Player + ".warns", WarnConfig.fc.getInt(Player + ".warns") - 1);
 				WarnConfig.Save();
 			} else if (Modo.equalsIgnoreCase("Todos")) {
-				sender.sendMessage(Main.m.getConfig().getString("Unwarn").replace("&", "ง")
+				sender.sendMessage(Main.m.getConfig().getString("Unwarn").replace("&", "ยง")
 						.replace("%q", WarnConfig.fc.getString(Player + ".warns")).replace("%sender", sender.getName())
 						.replace("%b", Player));
 				WarnConfig.fc.set(Player + ".warns", 0);
@@ -683,7 +761,7 @@ public class APIGeral implements Listener {
 	public static void Warn(Player p, CommandSender sender, String Motivo) {
 		String Player = p.getName();
 
-		if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
+		if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
 			if (Data.getwarns(Player) < 2) {
 				Data.addwarn(Player, 1);
 			} else {
@@ -703,15 +781,159 @@ public class APIGeral implements Listener {
 			}
 		}
 
-		// Broadcast
-		List<String> messagesWarn = Main.m.getConfig().getStringList("Warn");
-		String messageWarn = "";
-		for (String mWarn : messagesWarn) {
-			messageWarn += mWarn.replace("&", "ง").replace("%b", Player).replace("%m", Motivo).replace("%sender",
-					sender.getName());
-			messageWarn += "\n";
+		if (!Motivo.contains("-s")) {
+			// Broadcast
+			List<String> messagesWarn = Main.m.getConfig().getStringList("Warn");
+			String messageWarn = "";
+			for (String mWarn : messagesWarn) {
+				messageWarn += mWarn.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo).replace("%sender",
+						sender.getName());
+				messageWarn += "\n";
+			}
+			Bukkit.broadcastMessage(messageWarn);
+			// Broadcast
+		} else {
+			// Broadcast
+			List<String> messagesbanon = Main.m.getConfig().getStringList("TempMute");
+			String messagebanon = "";
+			for (String mbanon : messagesbanon) {
+				messagebanon += mbanon.replace("&", "ยง").replace("%b", Player).replace("%m", Motivo.replace("-s", ""))
+						.replace("%sender", sender.getName());
+				messagebanon += "\n";
+			}
+			sender.sendMessage("ยงf[Silent]");
+			sender.sendMessage(messagebanon);
+			// Broadcast
 		}
-		Bukkit.broadcastMessage(messageWarn);
-		// Broadcast
+	}
+
+	public static void addMute() {
+		if (StatusConfig.fc.getInt("Status.Mutes") <= 0) {
+			StatusConfig.fc.set("Status.Mutes", 1);
+			StatusConfig.Save();
+		} else {
+			StatusConfig.fc.set("Status.Mutes", (getMute() + 1));
+			StatusConfig.Save();
+		}
+	}
+
+	public static int getMute() {
+		if (StatusConfig.fc.getInt("Status.Mutes") <= 0) {
+			return 0;
+		} else {
+			return StatusConfig.fc.getInt("Status.Mutes");
+		}
+	}
+
+	public static void addBan() {
+		if (StatusConfig.fc.getInt("Status.Bans") <= 0) {
+			StatusConfig.fc.set("Status.Bans", 1);
+			StatusConfig.Save();
+		} else {
+			StatusConfig.fc.set("Status.Bans", (getBan() + 1));
+			StatusConfig.Save();
+		}
+	}
+
+	public static int getBan() {
+		if (StatusConfig.fc.getInt("Status.Bans") <= 0) {
+			return 0;
+		} else {
+			return StatusConfig.fc.getInt("Status.Bans");
+		}
+	}
+
+	public static String getTempoBanido(String p) {
+		if (CheckTempBan(p)) {
+			if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
+				return TimeAPI.getMSG(Data.getTempBanTempo(p)).replace("%sender", Data.getTempBanStaff(p));
+			} else {
+				return TimeAPI.getMSG(Long.valueOf(TempBanConfig.fc.getString(p + ".Tempo")));
+			}
+		} else {
+			return null;
+		}
+	}
+
+	public static String getTempBanMotivo(String p) {
+		if (CheckTempBan(p)) {
+			if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
+				return Data.getTempBanMotivo(p);
+			} else {
+				return TempBanConfig.fc.getString(p + ".Motivo");
+			}
+		} else {
+			return null;
+		}
+	}
+
+	public static String getTempBanStaff(String p) {
+		if (CheckTempBan(p)) {
+			if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
+				return Data.getTempBanStaff(p);
+			} else {
+				return TempBanConfig.fc.getString(p + ".Staff");
+			}
+		} else {
+			return null;
+		}
+	}
+
+	public static String getBanMotivo(String p) {
+		if (CheckBan(p)) {
+			if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
+				return Data.getBanMotivo(p);
+			} else {
+				return BanConfig.fc.getString(p + ".motivo");
+			}
+		} else {
+			return null;
+		}
+	}
+
+	public static String getBanStaff(String p) {
+		if (CheckTempBan(p)) {
+			if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
+				return Data.getBanStaff(p);
+			} else {
+				return BanConfig.fc.getString(p + ".Staff");
+			}
+		} else {
+			return null;
+		}
+	}
+
+	public static void addIp(String Ip, String p) {
+		List<String> ips = IpConfig.fc.getStringList(Ip);
+		ips.add(p);
+		IpConfig.fc.set(Ip, ips);
+		IpConfig.SaveConfig();
+	}
+
+	public static List<String> getIp(String Ip) {
+		return IpConfig.fc.getStringList(Ip);
+	}
+
+	public static String getColorDupeIp(String Player, String Ip) {
+		if (CheckIpBan(Ip) == true) {
+			return "ยง4";
+		}
+		if (CheckBan(Player) == true) {
+			return "ยง4";
+		}
+		if (CheckTempBan(Player) == true) {
+			return "ยง4";
+		}
+		if (CheckMute(Player) == true) {
+			return "ยงc";
+		}
+		if (CheckTempMute(Player) == true) {
+			return "ยงc";
+		}
+		if (Bukkit.getPlayer(Player) != null) {
+			return "ยงa";
+		} else {
+			return "ยง7";
+		}
 	}
 }

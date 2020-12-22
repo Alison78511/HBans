@@ -5,96 +5,119 @@
 #################################################
 
 #Permissões
-#HBans.Ban
-#HBans.IpBan
-#HBans.Mute
-#HBans.tempban
-#HBans.tempmute
-#HBans.unmute
-#HBans.unban
-#HBans.ipunban
-#HBans.unwarn
-#HBans.kick
-#HBans.warn
-#HBans.reportes
-#HBans.verificar
-#HBans.Imune."comando"
+#hbans.ban
+#hbans.ipban
+#hbans.mute
+#hbans.tempban
+#hbans.tempmute
+#hbans.unmute
+#hbans.unban
+#hbans.ipunban
+#hbans.unwarn
+#hbans.kick
+#hbans.warn
+#hbans.reportes
+#hbans.verificar
+#hbans.Imune."comando"
 
 #Sumário
-#%sender = player/staffer que digitou o comando
-#%b = player punido
-#%m = motivo
-#%t = momento em que o tempban do player expira
-#%q = quantidade de warns removidas
+#%sender = player/staffer que digitou o comando;
+#%b - player punido;
+#%m - motivo;
+#%t - momento em que o tempban do player expira;
+#%q - quantidade de warns removidas;
+#%pb - players banidos até hoje;
+#%pm - player mutados até hoje;
+#%pr - prova inserida pelo staffer.
 
 #Opções de integração
 Twitter: false
-Discord: false
+Discord: true
 Twitter-Reportes: false
-Discord-Reportes: false
+Discord-Reportes: true
 
 #Detalhes do bot
 Bot:
-  Token: 'XXX-XXX-XXX-XXX'
-  Presence: 'HubCodes.tk'
-  Canal: 'XXX-XXX-XXX-XXX'
-  Canal-Reportes: 'XXX-XXX-XXX-XXX'
+  Token: ''
+  Presence: 'hubcodes.tk'
+  Canal: 'id do canal'
+  Canal-Reportes: 'id do canal'
 
-#Opção de MySQL
 MySQL:
   Ativado: false
-  Host: 'Ip da Host'
-  Port: 'Porta da Host'
-  User: 'SeuUsuario'
-  Database: 'SuaDatabase'
-  Pass: 'SuaSenha'
+  Host: ''
+  User: ''
+  Port: ''
+  DataBase: ''
+  Password: ''
+  
+#Configure o "WatchDog"
+#Tempo em minutos
+WatchDog:
+  Ativado: true
+  Tempo: '5'
+  Mensagem:
+    - ''
+    - '&6&lPUNIÇÕES APLICADAS'
+    - '&8• &fForam banidos &a%pb &fjogadores até o momento'
+    - '&8• &fForam mutados &a%pm &fjogadores até o momento'
+    - ''
+
+#Configure os motivos de punição
+Punir:
+  Uso de Hack:
+    Comando: 'ban %b %pr (Uso de hack)'
+    Permissao: 'hbans.ban'
+  Antijogo:
+    Comando: 'mute %b %pr (Antijogo)'
+    Permissao: 'hbans.mute'  
 
 #Login Punido
 BanLogin:
-  - '    &bHBans'
+  - '    HBans'
   - ' '
-  - '&cVoce esta permanentemente banido'
+  - '&cVoce esta PERMANENTE banido'
   - '&cMotivo: %m'
   - '&cStaff: %sender'
   - ' '
-  - 'Compre seu unban em: HBans.com.br'
+  - 'Compre seu unban em: hubcodes.tk'
   
 IpBanLogin:
-  - '    &bHBans'
+  - '    HBans'
   - ' '
-  - '&cSeu ip esta permanentemente banido'
+  - '&cSeu ip esta PERMANENTE banido'
   - '&cMotivo: %m'
   - '&cStaff: %sender'
   - ' '
-  - 'Compre seu unban em: HBans.com.br'
+  - 'Compre seu unban em: hubcodes.tk'
   
 MuteChat:
-  - '    &bHBans'
-  - '&c• Voce esta permanentemente Mutado'
+  - '    HBans'
+  - '&c• Voce esta PERMANENTE Mutado'
   - '&c• Motivo: %m'  
   
 Report:
-  - '     &bHBans'
+  - '     HBans'
   - '&cPlayer Reportado'
   - '&cAguarde até que um staff veja'
   - ''
   
 TempBanLogin:
-  - '    &bHBans'
+  - '    HBans'
   - ' '
   - '&cVoce esta temporariamente banido'
   - '&cMotivo: %m'
   - '&cStaff: %sender'
   - '&cExpira em: %t'
-  - 'Compre seu unban em: HBans.com.br'
+  - 'Compre seu unban em: hubcodes.tk'
   
 TempMuteChat:
-  - '    &bHBans'
-  - '&c• Voce esta Mutado por %t'
+  - '    HBans'
+  - '&c• Voce esta mutado por %t'
   - '&c• Motivo: %m'
 
 KickLogin:
-  - ' &bHBans'
+  - ' HBans'
   - ' '
   - '&cVoce foi kickado'
   - '&cMotivo: %m'
@@ -104,88 +127,108 @@ KickLogin:
 
 #Punições
 Ban:
-  - '     &bHBans'
-  - '&c• &6%sender &cBaniu o Jogador &6%b'
-  - '&c• Motivo Da Punição: %m'
-  - '&c• Duração Da Punição: Permanente'
+  - '     HBans'
+  - '&c• &6%sender &cbaniu o jogador &6%b'
+  - '&c• Motivo da punição: %m'
+  - '&c• Duração da punição: ETERNO'
+
+BanSilent:
+  - '     HBans'
+  - '&c• &6%sender &cbaniu o jogador &6%b'
+  - '&c• Motivo da punição: %m'
+  - '&c• Duração da punição: ETERNO'
   
 IpBan:
-  - '     &bHBans'
-  - '&c• &6%sender &cBaniu o ip do Jogador &6%b'
-  - '&c• Motivo Da Punição: %m'
-  - '&c• Duração Da Punição: Permanente'
+  - '     HBans'
+  - '&c• &6%sender &cbaniu o IP do jogador &6%b'
+  - '&c• Motivo da punição: %m'
+  - '&c• Duração da punição: ETERNO'
   
 Mute:
-  - '     &bHBans'
-  - '&c• &6%sender &cMutou o Jogador &6%b'
-  - '&c• Motivo Da Punição: %m'
-  - '&c• Duração Da Punição: Permanente'
+  - '     HBans'
+  - '&c• &6%sender &cmutou o jogador &6%b'
+  - '&c• Motivo da dunição: %m'
+  - '&c• Duração da punição: ETERNO'
+
+MuteSilent:
+  - '     HBans'
+  - '&c• &6%sender &cmutou o jogador &6%b'
+  - '&c• Motivo da dunição: %m'
+  - '&c• Duração da punição: ETERNO'
   
-ReportS:
-  - '  &bHBans'
-  - '&cNovo Reporte'
+Report:
+  - '  HBans'
+  - '&cNOVO REPORTE'
   - '&cDigite /reportes para ve-lo'
   - ''
   
 TempBan:
-  - '     &bHBans'
-  - '&c• &6%sender &cBaniu o Jogador &6%b'
-  - '&c• Motivo Da Punição: %m'
+  - '     HBans'
+  - '&c• &6%sender &cbaniu o jogador &6%b'
+  - '&c• Motivo da punição: %m'
+  - '&c• Expira em: %t'
+
+TempBanSilent:
+  - '     HBans'
+  - '&c• &6%sender &cbaniu o jogador &6%b'
+  - '&c• Motivo da punição: %m'
   - '&c• Expira em: %t'
   
 TempMute:
-  - '     &bHBans'
-  - '&c• &6%sender &cMutou o Jogador &6%b'
-  - '&c• Motivo Da Punição: %m'
+  - '     HBans'
+  - '&c• &6%sender &cmutou o jogador &6%b'
+  - '&c• Motivo da punição: %m'
+  - '&c• Expira em: %t'
+
+TempMuteSilent:
+  - '     HBans'
+  - '&c• &6%sender &cmutou o jogador &6%b'
+  - '&c• Motivo da punição: %m'
   - '&c• Expira em: %t'
   
 Kick:
-  - '     &bHBans'
-  - '&c• &6%sender &cKickou o Jogador &6%b'
-  - '&c• Motivo Da Punição: %m'
-  - '&c• Duração Da Punição: ERROR 404 :P'
+  - '     HBans'
+  - '&c• &6%sender &ckickou o jogador &6%b'
+  - '&c• Motivo da punição: %m'
+  - '&c• Duração da punição: Nenhum motivo dado'
   
 Warn:
-  - '     &bHBans'
-  - '&c• &6%sender &cdeu uma Warn Para &6%b'
-  - '&c• Motivo Da Punição: %m'
-  - '&c• Duração Da Punição: ERROR 404 :P'
+  - '     HBans'
+  - '&c• &6%sender &cdeu uma warn Para &6%b'
+  - '&c• Motivo da punição: %m'
+  - '&c• Duração da punição: Nenhum motivo dado'
 
 #Twitter
 #As mensagens só serão mostradas se a opção
 #de integração ao Twitter estiver ligada
 BanT:
-  - '-=-=-=-=-=-HBans-=-=-=-=-=-'
-  - '• %sender Baniu o Jogador %b'
-  - '• Motivo Da Punição: %m'
-  - '• Duração Da Punição: Permanente'
+  - 'HBans'
+  - '• %sender baniu o jogador %b'
+  - '• Motivo da punição: %m'
+  - '• Duração da punição: ETERNO'
   
 IpBanT:
-  - '-=-=-=-=-=-HBans-=-=-=-=-=-'
-  - '• %sender Baniu o ip do Jogador %b'
-  - '• Motivo Da Punição: %m'
-  - '• Duração Da Punição: Permanente'
+  - 'HBans'
+  - '• %sender baniu o ip do jogador %b'
+  - '• Motivo da punição: %m'
+  - '• Duração da punição: ETERNO'
   
 TempBanT:
-  - '-=-=-=-=-=-HBans-=-=-=-=-=-'
-  - '• %sender Baniu o Jogador %b'
-  - '• Motivo Da Punição: %m'
+  - 'HBans'
+  - '• %sender baniu o jogador %b'
+  - '• Motivo da punição: %m'
   - '• Expira em: %t'
   
 MuteT:
-  - '-=-=-=-=-=-HBans-=-=-=-=-=-'
-  - '• %sender Mutou o Jogador %b'
-  - '• Motivo Da Punição: %m'
-  - '• Duração Da Punição: Permanente'
+  - 'HBans'
+  - '• %sender m'
   
 TempMuteT:
-  - '-=-=-=-=-=-HBans-=-=-=-=-=-'
-  - '• %sender Mutou o Jogador %b'
-  - '• Motivo Da Punição: %m'
-  - '• Expira em: %t'
+  - 'HBans'
+  - '• %sender m'
   
 ReportT:
-  - '-=-=-=-=-=-HBans-=-=-=-=-=-'
+  - 'HBans'
   - 'Reportado: %b'
   - 'Reporter: %sender'
   - 'Motivo: %m'
@@ -197,88 +240,89 @@ BanD:
   Imagem: true
   Titulo: '**Nova Punição**'
   Footer: 'HBans'
-  ImagemLink: 'https://static.wixstatic.com/media/af3f9b_22ded659dc7d412ea711c23082e6e21e~mv2.gif'
-  ImagemFooter: 'https://HubCodes.tk/assets/img/logosz2.png'
+  ImagemLink: 'https://i.imgur.com/Hs3POwo.png'
+  ImagemFooter: 'https://i.imgur.com/Hs3POwo.png'
   Mensagem:
-    - '• %sender Baniu o Jogador %b'
-    - '• Motivo Da Punição: %m'
-    - '• Duração Da Punição: Permanente'
+    - '• %sender baniu o jogador %b'
+    - '• Motivo da punição: %m'
+    - '• Duração da punição: ETERNO'
     
 IpBanD:
   Imagem: true
   Titulo: '**Nova Punição**'
   Footer: 'HBans'
-  ImagemLink: 'https://static.wixstatic.com/media/af3f9b_22ded659dc7d412ea711c23082e6e21e~mv2.gif'
-  ImagemFooter: 'https://HubCodes.tk/assets/img/logosz2.png'
+  ImagemLink: 'https://i.imgur.com/Hs3POwo.png'
+  ImagemFooter: 'https://i.imgur.com/Hs3POwo.png'
   Mensagem:
-    - '• %sender Baniu o ip do Jogador %b'
-    - '• Motivo Da Punição: %m'
-    - '• Duração Da Punição: Permanente'
+    - '• %sender baniu o IP do jogador %b'
+    - '• Motivo da punição: %m'
+    - '• Duração da punição: ETERNO'
   
 TempBanD:
   Imagem: true
   Titulo: '**Nova Punição**'
   Footer: 'HBans'
-  ImagemLink: 'https://static.wixstatic.com/media/af3f9b_22ded659dc7d412ea711c23082e6e21e~mv2.gif'
-  ImagemFooter: 'https://HubCodes.tk/assets/img/logosz2.png'
+  ImagemLink: 'https://i.imgur.com/Hs3POwo.png'
+  ImagemFooter: 'https://i.imgur.com/Hs3POwo.png'
   Mensagem:
-    - '-=-=-=-=-=-HBans-=-=-=-=-=-'
-    - '• %sender Baniu o Jogador %b'
-    - '• Motivo Da Punição: %m'
+    - 'HBans'
+    - '• %sender baniu o jogador %b'
+    - '• Motivo da punição: %m'
     - '• Expira em: %t'
   
 MuteD:
   Imagem: true
   Titulo: '**Nova Punição**'
   Footer: 'HBans'
-  ImagemLink: 'https://static.wixstatic.com/media/af3f9b_22ded659dc7d412ea711c23082e6e21e~mv2.gif'
-  ImagemFooter: 'https://HubCodes.tk/assets/img/logosz2.png'
+  ImagemLink: 'https://i.imgur.com/Hs3POwo.png'
+  ImagemFooter: 'https://i.imgur.com/Hs3POwo.png'
   Mensagem:
-    - '• %sender Mutou o Jogador %b'
-    - '• Motivo Da Punição: %m'
-    - '• Duração Da Punição: Permanente'
+    - '• %sender mutou o jogador %b'
+    - '• Motivo da punição: %m'
+    - '• Duração da punição: ETERNO'
 
 TempMuteD:
   Imagem: true
   Titulo: '**Novo Report**'
   Footer: 'HBans'
-  ImagemLink: 'https://static.wixstatic.com/media/af3f9b_22ded659dc7d412ea711c23082e6e21e~mv2.gif'
-  ImagemFooter: 'https://HubCodes.tk/assets/img/logosz2.png'
+  ImagemLink: 'https://i.imgur.com/Hs3POwo.png'
+  ImagemFooter: 'https://i.imgur.com/Hs3POwo.png'
   Mensagem:
-    - '-=-=-=-=-=-HBans-=-=-=-=-=-'
-    - '• %sender Mutou o Jogador %b'
-    - '• Motivo Da Punição: %m'
+    - 'HBans'
+    - '• %sender mutou o jogador %b'
+    - '• Motivo da punição: %m'
     - '• Expira em: %t'
   
 ReportD:
   Imagem: true
   Titulo: '**Novo Report**'
   Footer: 'HBans'
-  ImagemLink: 'https://static.wixstatic.com/media/af3f9b_22ded659dc7d412ea711c23082e6e21e~mv2.gif'
-  ImagemFooter: 'https://HubCodes.tk/assets/img/logosz2.png'
+  ImagemLink: 'https://i.imgur.com/Hs3POwo.png'
+  ImagemFooter: 'https://i.imgur.com/Hs3POwo.png'
   Mensagem:
     - '• Reportado: %b'
     - '• Reporter: %sender'
     - '• Motivo: %m'
   
 #Comando Incorreto
-BanI: '&cUse: /ban <Player> <Motivo>'
-IpBanI: '&cUse: /ipban <Player> <Motivo>'
-MuteI: '&cUse: /mute <Player> <Motivo>'
-TempBanI: '&cUse: /tempban <Player> <Tempo> <Minutos/Horas/Dias> <Motivo>'
-TempMuteI: '&cUse: /tempmute <Player> <Tempo> <Minutos/Horas/Dias> <Motivo>'
-UnmuteI: '&cUse: /unmute <Player>'
-UnbanI: '&cUse: /unban <Player>'
+PunirI: '&cUse: /punir <player> <prova>'
+BanI: '&cUse: /ban <player> <motivo>'
+IpBanI: '&cUse: /ipban <player> <motivo>'
+MuteI: '&cUse: /mute <player> <motivo>'
+TempBanI: '&cUse: /tempban <player> <tempo> <minutos/horas/dias> <motivo>'
+TempMuteI: '&cUse: /tempmute <player> <tempo> <minutos/horas/dias> <motivo>'
+UnmuteI: '&cUse: /unmute <player>'
+UnbanI: '&cUse: /unban <player>'
 IpUnbanI: '&cUse: /ipunban <Player/IP>'
-UnwarnI: '&cUse: /unwarn <Player> <um/todos>'
-KickI: '&cUse: /kick <Player> <Motivo>'
-WarnI: '&cUse: /warn <Player> <Motivo>'
-ReportarI: '&cUse: /reportar <Player> <Motivo>'
+UnwarnI: '&cUse: /unwarn <player> <um/todos>'
+KickI: '&cUse: /kick <player> <motivo>'
+WarnI: '&cUse: /warn <player> <motivo>'
+ReportarI: '&cUse: /reportar <player> <motivo>'
 ReportesI: '&cUse: /reportes'
-VerificarI: '&cUse: /verificar <Player>'
+VerificarI: '&cUse: /verificar <player>'
 
 #Mensagens
-Prefix: '&bHBans &6»'
+Prefix: '&6REVOLUTION &fMC &6»'
 SemPermissao: '&cVocê não tem permissão para usar este comando!'
 JaBanido: '&cEste jogador já esta banido!'
 JaMute: '&cEste jogador já esta mutado!'
@@ -291,6 +335,7 @@ Unwarn: '&aVocê removeu %q warns de %b'
 PlayerOff: '&cEste player não esta conectado ao servidor'
 PlayerImune: '&cEste player é imune a essa punição'
 FormatoI: '&cNumero invalido ou muito alto'
+LinkI: '&cSua prova deve iniciar com http:// ou https://'
 UnwarnM: '&cEsse player não possui warns'
 DenunciaNegada: '&cDenuncia negada com sucesso'
 DenunciaAceita: '&aPunição aplicada com sucesso'
@@ -298,8 +343,8 @@ DenunciaTeleporte: '&aTeleportado com sucesso'
 
 #Outros
 #Comando que será executado caso o player receba 3 warns
-ComandoWarn: 'ban %b'
+ComandoWarn: 'tempmute %b'
 #Comando que será executado quando um report for aceito
-ComandoReport: 'ban %b'
+ComandoReport: 'ban %b %m'
 #Um som de bigorna alertará um novo reporte aos staffers
 SomReport: true

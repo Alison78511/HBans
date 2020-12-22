@@ -14,15 +14,15 @@ public class MuteC implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (label.equalsIgnoreCase("mute") || label.equalsIgnoreCase("mutar")) {
-			if (!sender.hasPermission("HBans.mute")) {
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
+			if (!sender.hasPermission("hbans.mute")) {
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
 						+ Main.m.getConfig().getString("SemPermissao"));
 				return true;
 			}
 
 			if (!(args.length >= 2)) {
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
-						+ Main.m.getConfig().getString("MuteI").replace("&", "ยง"));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
+						+ Main.m.getConfig().getString("MuteI").replace("&", "ง"));
 				return true;
 			}
 			StringBuilder sb = new StringBuilder();
@@ -34,15 +34,15 @@ public class MuteC implements CommandExecutor {
 			Player t = Bukkit.getPlayer(args[0]);
 			if (args.length >= 1) {
 				if (t != null) {
-					if (APIGeral.CheckMute(t) == true) {
-						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
-								+ Main.m.getConfig().getString("JaMute").replace("&", "ยง"));
+					if (APIGeral.CheckMute(t.getName()) == true) {
+						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
+								+ Main.m.getConfig().getString("JaMute").replace("&", "ง"));
 						return true;
 					}
 
-					if (t.hasPermission("HBans.Imune.Mute")) {
-						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
-								+ Main.m.getConfig().getString("PlayerImune").replace("&", "ยง"));
+					if (t.hasPermission("hbans.Imune.Mute")) {
+						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
+								+ Main.m.getConfig().getString("PlayerImune").replace("&", "ง"));
 						return true;
 					}
 
@@ -51,8 +51,8 @@ public class MuteC implements CommandExecutor {
 				}
 				return true;
 			} else {
-				sender.sendMessage(Main.m.getConfig().getString(Main.m.getConfig().getString("Prefix").replace("&", "ยง")
-						+ " " + Main.m.getConfig().getString("MuteI").replace("&", "ยง")));
+				sender.sendMessage(Main.m.getConfig().getString(Main.m.getConfig().getString("Prefix").replace("&", "ง")
+						+ " " + Main.m.getConfig().getString("MuteI").replace("&", "ง")));
 			}
 		}
 		return false;

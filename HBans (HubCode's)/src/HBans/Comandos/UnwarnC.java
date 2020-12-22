@@ -14,7 +14,7 @@ public class UnwarnC implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (label.equalsIgnoreCase("unwarn")) {
-			if (!sender.hasPermission("HBans.unwarn")) {
+			if (!sender.hasPermission("hbans.unwarn")) {
 				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "§") + " "
 						+ Main.m.getConfig().getString("SemPermissao").replace("&", "§"));
 				return true;

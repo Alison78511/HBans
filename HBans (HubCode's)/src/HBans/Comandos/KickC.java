@@ -14,7 +14,7 @@ public class KickC implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (label.equalsIgnoreCase("kick")) {
-			if (!sender.hasPermission("HBans.kick")) {
+			if (!sender.hasPermission("hbans.kick")) {
 				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "§") + " "
 						+ Main.m.getConfig().getString("SemPermissao").replace("&", "§"));
 				return true;
@@ -35,7 +35,7 @@ public class KickC implements CommandExecutor {
 			if (args.length >= 1) {
 				if (t != null) {
 					
-					if (t.hasPermission("HBans.Imune.Kick")){
+					if (t.hasPermission("hbans.Imune.Kick")){
 						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "§") + " "
 								+ Main.m.getConfig().getString("PlayerImune").replace("&", "§"));
 						return true;

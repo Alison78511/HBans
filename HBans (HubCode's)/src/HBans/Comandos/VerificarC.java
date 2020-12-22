@@ -30,7 +30,7 @@ public class VerificarC implements CommandExecutor {
 		}
 		Player p = (Player) sender;
 		if (label.equalsIgnoreCase("verificar")) {
-			if (!sender.hasPermission("HBans.verificar")) {
+			if (!sender.hasPermission("hbans.verificar")) {
 				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "§") + " "
 						+ Main.m.getConfig().getString("SemPermissao"));
 				return true;

@@ -17,8 +17,8 @@ public class MessageNormal implements Listener {
 	@EventHandler
 	public void chaty(AsyncPlayerChatEvent e) {
 		Player p = e.getPlayer();
-		if (APIGeral.CheckMute(p) == true) {
-			if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
+		if (APIGeral.CheckMute(p.getName()) == true) {
+			if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
 				List<String> messagesbanlogin = Main.m.getConfig().getStringList("MuteChat");
 				String messagebanlogin = "";
 				for (String mbanlogin : messagesbanlogin) {
@@ -44,8 +44,8 @@ public class MessageNormal implements Listener {
 	@EventHandler
 	public void chaty2(AsyncPlayerChatEvent e) {
 		Player p = e.getPlayer();
-		if (APIGeral.CheckTempMute(p) == true) {
-			if (Main.m.getConfig().getBoolean("MySQL.ativado") == true) {
+		if (APIGeral.CheckTempMute(p.getName()) == true) {
+			if (Main.m.getConfig().getBoolean("MySQL.Ativado") == true) {
 				long endOfBan = Data.gettempmuteTempo(p.getName());
 				long now = System.currentTimeMillis();
 				long diff = endOfBan - now;

@@ -1,8 +1,8 @@
 package HBans.EventApi;
 
 public enum TimeAPI {
-	SECOND("segundos", 1 / 60), MINUTE("minutos", 1), HOUR("horas", 60), DAY("dias", 60 * 24), WEEK("semanas",
-			60 * 24 * 7), MONTH("meses", 30 * 60 * 24), YEAR("anos", 30 * 60 * 24 * 12);
+	SECOND("segundos", 1 / 60), MINUTE("minutos", 1), HOUR("horas", 60), DAY("dias", 60 * 24),
+	WEEK("semanas", 60 * 24 * 7), MONTH("meses", 30 * 60 * 24), YEAR("anos", 30 * 60 * 24 * 12);
 
 	public String name;
 	public int multi;

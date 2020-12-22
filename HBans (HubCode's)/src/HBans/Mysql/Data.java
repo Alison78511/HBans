@@ -10,8 +10,10 @@ import java.util.List;
 
 import org.bukkit.event.Listener;
 
+import HBans.Main;
+
 public class Data implements Listener {
-	public static Connection con;
+	public static Connection con = Main.conn;
 	public static Statement statement;
 
 	public static void CriarTabela() {

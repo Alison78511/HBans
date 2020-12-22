@@ -12,7 +12,7 @@ public class IpUnbanC implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (!sender.hasPermission("HBans.ipunban")) {
+		if (!sender.hasPermission("hbans.ipunban")) {
 			sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "§") + " "
 					+ Main.m.getConfig().getString("SemPermissao"));
 			return true;

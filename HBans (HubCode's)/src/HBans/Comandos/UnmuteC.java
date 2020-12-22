@@ -15,7 +15,7 @@ public class UnmuteC implements CommandExecutor {
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (!sender.hasPermission("HBans.unmute")) {
+		if (!sender.hasPermission("hbans.unmute")) {
 			sender.sendMessage(Main.m.getConfig().getString(Main.m.getConfig().getString("Prefix").replace("&", "§")
 					+ " " + Main.m.getConfig().getString("SemPermissao")));
 			return true;
@@ -24,9 +24,9 @@ public class UnmuteC implements CommandExecutor {
 			Player tn = Bukkit.getPlayer(args[0]);
 			OfflinePlayer tff = Bukkit.getOfflinePlayer(args[0]);
 			if (tn != null) {
-				APIGeral.Unmute(tn, sender);
+				APIGeral.Unmute(tn.getName(), sender);
 			} else {
-				APIGeral.Unmute(tff.getPlayer(), sender);
+				APIGeral.Unmute(tff.getName(), sender);
 			}
 		} else {
 			sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "§")

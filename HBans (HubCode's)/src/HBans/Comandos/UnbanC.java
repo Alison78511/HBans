@@ -14,7 +14,7 @@ public class UnbanC implements CommandExecutor {
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (!sender.hasPermission("HBans.unban")) {
+		if (!sender.hasPermission("hbans.unban")) {
 			sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "§") + " "
 					+ Main.m.getConfig().getString("SemPermissao"));
 			return true;

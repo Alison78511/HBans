@@ -1,6 +1,6 @@
 main: HBans.Main
-version: 5.4
-author: Alison
+version: 1.0
+author: Álison
 description: Plugin de bans com integração twitter e discord totalmente configuravel
 name: HBans
 commands:
@@ -19,3 +19,5 @@ commands:
  reportar:
  verificar:
  unwarn:
+ punir:
+ dupeip:

@@ -22,23 +22,23 @@ public class TempBanC implements CommandExecutor {
 
 		String allArgs = sb.toString().trim();
 		if (label.equalsIgnoreCase("tempban")) {
-			if (!sender.hasPermission("HBans.tempban")) {
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
-						+ Main.m.getConfig().getString("SemPermissao").replace("&", "ยง"));
+			if (!sender.hasPermission("hbans.tempban")) {
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
+						+ Main.m.getConfig().getString("SemPermissao").replace("&", "ง"));
 				return true;
 			}
 			if (args.length >= 4) {
 				Player t = Bukkit.getPlayer(args[0]);
 				if (t != null) {
 					if (APIGeral.CheckTempBan(t.getName()) == true) {
-						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
-								+ Main.m.getConfig().getString("JaBan").replace("&", "ยง"));
+						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
+								+ Main.m.getConfig().getString("JaBan").replace("&", "ง"));
 						return true;
 					}
 					
-					if (t.hasPermission("HBans.Imune.TempBan")){
-						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
-								+ Main.m.getConfig().getString("PlayerImune").replace("&", "ยง"));
+					if (t.hasPermission("hbans.Imune.TempBan")){
+						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
+								+ Main.m.getConfig().getString("PlayerImune").replace("&", "ง"));
 						return true;
 					}
 					
@@ -51,17 +51,17 @@ public class TempBanC implements CommandExecutor {
 						APIGeral.TempBan(sender.getName(), t.getName(), allArgs, endOfBan, t);
 						APIGeral.addBan();
 					} else {
-						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
-								+ Main.m.getConfig().getString("TempBanI").replace("&", "ยง"));
+						sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
+								+ Main.m.getConfig().getString("TempBanI").replace("&", "ง"));
 					}
 				} else {
-					sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
-							+ Main.m.getConfig().getString("PlayerOff").replace("&", "ยง"));
+					sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
+							+ Main.m.getConfig().getString("PlayerOff").replace("&", "ง"));
 				}
 				return true;
 			} else {
-				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ยง") + " "
-						+ Main.m.getConfig().getString("TempBanI").replace("&", "ยง"));
+				sender.sendMessage(Main.m.getConfig().getString("Prefix").replace("&", "ง") + " "
+						+ Main.m.getConfig().getString("TempBanI").replace("&", "ง"));
 			}
 		}
 		return false;
