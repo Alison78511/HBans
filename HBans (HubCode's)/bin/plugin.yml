@@ -1,8 +1,8 @@
-main: PombaBans.Main
+main: HBans.Main
 version: 1.0
 author: Álison
 description: Plugin de bans com integração twitter e discord totalmente configuravel
-name: PombaBans
+name: HBans
 commands:
  ban:
  ipban:

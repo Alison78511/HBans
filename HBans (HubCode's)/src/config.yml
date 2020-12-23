@@ -32,9 +32,9 @@
 
 #Opções de integração
 Twitter: false
-Discord: true
+Discord: false
 Twitter-Reportes: false
-Discord-Reportes: true
+Discord-Reportes: false
 
 #Detalhes do bot
 Bot:
@@ -320,20 +320,22 @@ WarnI: '&cUse: /warn <player> <motivo>'
 ReportarI: '&cUse: /reportar <player> <motivo>'
 ReportesI: '&cUse: /reportes'
 VerificarI: '&cUse: /verificar <player>'
+DupeIpI: '&cUse: /dupeip <player>'
 
 #Mensagens
-Prefix: '&6REVOLUTION &fMC &6»'
-SemPermissao: '&cVocê não tem permissão para usar este comando!'
-JaBanido: '&cEste jogador já esta banido!'
-JaMute: '&cEste jogador já esta mutado!'
-JaUnmute: '&cEste jogador não está mutado!'
-JaUnban: '&cEste jogador não está banido!'
+Prefix: '&6HBans »'
+SemPermissao: '&cVocê não tem permissão para usar esse comando!'
+JaBanido: '&cEsse jogador já esta banido!'
+JaMute: '&cEsse jogador já esta mutado!'
+JaUnmute: '&cEsse jogador não está mutado!'
+JaUnban: '&cEsse jogador não está banido!'
 Unmute: '&aVocê desmutou o jogador %b'
 Unban: '&aVoce desbaniu o jogador %b'
 IpUnban: '&aVoce desbaniu o ip do jogador %b'
 Unwarn: '&aVocê removeu %q warns de %b'
-PlayerOff: '&cEste player não esta conectado ao servidor'
-PlayerImune: '&cEste player é imune a essa punição'
+PlayerOff: '&cEsse player não esta conectado ao servidor'
+PlayerImune: '&cEsse player é imune a essa punição'
+PlayerI: '&cEsse player não é valido'
 FormatoI: '&cNumero invalido ou muito alto'
 LinkI: '&cSua prova deve iniciar com http:// ou https://'
 UnwarnM: '&cEsse player não possui warns'

@@ -125,6 +125,7 @@ public class JoinBan implements Listener {
 	@EventHandler
 	public void dupeip(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
+		APIGeral.setPlayerIp(p.getName(), p.getAddress().getHostName().replace(".", "-"));
 		if (!APIGeral.getIp(p.getAddress().getHostName().replace(".", "-")).contains(p.getName())) {
 			APIGeral.addIp(p.getAddress().getHostName().replace(".", "-"), p.getName());
 		}

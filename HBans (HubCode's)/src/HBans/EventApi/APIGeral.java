@@ -909,6 +909,15 @@ public class APIGeral implements Listener {
 		IpConfig.fc.set(Ip, ips);
 		IpConfig.SaveConfig();
 	}
+	
+	public static void setPlayerIp(String p, String Ip) {
+		IpConfig.fc.set(p, Ip);
+		IpConfig.SaveConfig();
+	}
+	
+	public static String getPlayerIp(String p) {
+		return IpConfig.fc.getString(p);
+	}
 
 	public static List<String> getIp(String Ip) {
 		return IpConfig.fc.getStringList(Ip);
